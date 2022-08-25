@@ -4,8 +4,10 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\API\PlaceController;
 use App\Http\Controllers\API\ArticleController;
 use App\Http\Controllers\API\ContactsController;
+use App\Http\Controllers\API\Places_TypeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +21,11 @@ use App\Http\Controllers\API\ContactsController;
 */
 
 Route::apiResource("article", ArticleController::class);
+Route::apiResource("contacts", ContactsController::class);
+Route::apiResource("places_type", Places_TypeController::class);
+Route::apiResource("places", PlaceController::class);
+Route::apiResource("contacts", ContactsController::class);
+Route::apiResource("contacts", ContactsController::class);
 Route::apiResource("contacts", ContactsController::class);
 
 Route::post('/auth/register', [AuthController::class, 'createUser']);
