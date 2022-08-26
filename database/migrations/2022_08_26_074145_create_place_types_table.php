@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('events', function (Blueprint $table) {
-                $table->bigInteger('events_type_id')->unsigned(); 
-                $table->foreign('events_type_id')
-                    ->references('id')
-                    ->on('events_type');
+        Schema::create('place_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('namePlaceType', 254);
+            $table->timestamps();
         });
     }
 
@@ -28,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('event', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('place_types');
     }
 };

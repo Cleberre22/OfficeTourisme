@@ -14,13 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('places', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('namePlace', 254);
+            $table->id();
+            $table->string('nameplace', 254);
             $table->mediumText('descriptionPlace');
-            $table->string('imagePlace');
-            $table->string('adressPlace', 254);
-            $table->double('latitudePlace', 8, 6);
-            $table->double('longitudePlace', 8, 6);
+            $table->string('imagePlace')->nullable();
+            $table->string('adressPlace')->nullable();
+            $table->double('latitudePlace', 8, 6)->nullable();
+            $table->double('longitudePlace', 8, 6)->nullable();
             $table->timestamps();
         });
     }

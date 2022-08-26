@@ -67,10 +67,10 @@ class ContactsController extends Controller
      * @param  \App\Models\Contacts  $contacts
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contacts $contacts)
+    public function destroy(Contacts $contact)
     {
          // On supprime l'utilisateur
-         $contacts->delete();
+         $contact->delete();
          // On retourne la réponse JSON
          return response()->json();
     }
