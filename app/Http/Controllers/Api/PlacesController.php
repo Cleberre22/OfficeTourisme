@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
 use App\Models\Places;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class PlacesController extends Controller
 {
@@ -16,9 +17,17 @@ class PlacesController extends Controller
     public function index()
     {
         // On récupère tous les utilisateurs
-        $places = Places::all();
+        // $places = Places::all();
         // On retourne les informations des utilisateurs en JSON
-        return response()->json($places);
+        
+
+        $places = DB::table('places')
+            ->leftjoin('place_types', 'place_types.id', '=', 'places.place_types_id')
+            ->select('places.*','namePlaceType')
+            ->get()
+            ->toArray();
+
+            return response()->json($places);
     }
 
     /**

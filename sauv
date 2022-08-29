@@ -1,0 +1,33 @@
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Titre de l'article</th>
+              <th>Contenu de l'article</th>
+              <th>Image</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articles.map((article) => (
+              <tr key={article.id}>
+                <td>{article.titleArticle}</td>
+                <td>
+                  <img
+                    src={`http://localhost:8000/storage/uploads/${article.image}`}
+                    width="75px"
+                  />
+                </td>
+                <td>
+                  <Button
+                    variant="danger"
+                    onClick={() => {
+                      deleteArticle(article.id);
+                    }}
+                  >
+                    Supprimer
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
