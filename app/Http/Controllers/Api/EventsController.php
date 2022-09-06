@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use App\Models\Events;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class EventsController extends Controller
 {
@@ -15,10 +17,20 @@ class EventsController extends Controller
      */
     public function index()
     {
-         // On récupère tous les utilisateurs
-         $events = Events::all();
-         // On retourne les informations des utilisateurs en JSON
-         return response()->json($events);
+
+        $events = DB::table('events')
+            ->leftjoin('event_types', 'event_types.id', '=', 'events.event_types_id')
+            ->leftjoin('places', 'places.id', '=', 'events.places_id')
+            ->select('events.*', 'nameEventType', 'namePlace')
+            ->get()
+            ->toArray();
+
+        return response()->json($events);
+
+        // On récupère tous les utilisateurs
+        $events = Events::all();
+        // On retourne les informations des utilisateurs en JSON
+        return response()->json($events);
     }
 
     /**
@@ -55,6 +67,14 @@ class EventsController extends Controller
             $filename = Null;
         }
 
+        // $startDateEventFr = $request->startDateEvent;
+        // $startDateEvent = Carbon::createFromFormat('d-m-Y', $startDateEventFr)
+        //     ->format('Y-m-d');
+
+        // $endDateEventFr = $request->endDateEvent;
+        // $endDateEvent = Carbon::createFromFormat('d-m-Y', $endDateEventFr)
+        //     ->format('Y-m-d');
+
         // On crée un nouvel contact
         $events = Events::create([
             'nameEvent' => $request->nameEvent,
@@ -78,8 +98,15 @@ class EventsController extends Controller
      */
     public function show(Events $event)
     {
+        $event = DB::table('events')
+        ->leftjoin('event_types', 'event_types.id', '=', 'events.event_types_id')
+        ->leftjoin('places', 'places.id', '=', 'events.places_id')
+        ->select('events.*', 'nameEventType', 'namePlace')
+        ->where('events.id', '=', $event->id)
+        ->get();
+        
         // On retourne les informations de l'utilisateur en JSON
-       return response()->json($event);
+        return response()->json($event);
     }
 
     /**
@@ -91,7 +118,7 @@ class EventsController extends Controller
      */
     public function update(Request $request, Events $event)
     {
-           // $request->validate([
+        // $request->validate([
         //     'nameEvent' => 'required|max:100',
         //     'descriptionEvent' => 'required',
         //     // 'imageEvent' => 'required',
@@ -114,7 +141,8 @@ class EventsController extends Controller
             $path = $request->file('imageEvent')->storeAs('public/uploads', $filename);
         } else {
             $filename = Null;
-        } $filename = "";
+        }
+        $filename = "";
         if ($request->hasFile('imageEvent')) {
             // On récupère le nom du fichier avec son extension, résultat $filenameWithExt : "jeanmiche.jpg"
             $filenameWithExt = $request->file('imageEvent')->getClientOriginalName();
@@ -128,20 +156,20 @@ class EventsController extends Controller
         } else {
             $filename = Null;
         }
-// dd($place);
-       // On crée un nouvel utilisateur
-       $event->update([
-        'nameEvent' => $request->nameEvent,
-        'descriptionEvent' => $request->descriptionEvent,
-        'imageEvent' => $filename,
-        'priceEvent' => $request->priceEvent,
-        'startDateEvent' => $request->startDateEvent,
-        'endDateEvent' => $request->endDateEvent,
-        'event_types_id' => $request->event_types_id,
-        'places_id' => $request->places_id,
-       ]);
-       // On retourne les informations du nouvel utilisateur en JSON
-       return response()->json($event, 201);
+        // dd($place);
+        // On crée un nouvel utilisateur
+        $event->update([
+            'nameEvent' => $request->nameEvent,
+            'descriptionEvent' => $request->descriptionEvent,
+            'imageEvent' => $filename,
+            'priceEvent' => $request->priceEvent,
+            'startDateEvent' => $request->startDateEvent,
+            'endDateEvent' => $request->endDateEvent,
+            'event_types_id' => $request->event_types_id,
+            'places_id' => $request->places_id,
+        ]);
+        // On retourne les informations du nouvel utilisateur en JSON
+        return response()->json($event, 201);
     }
 
     /**
@@ -152,9 +180,9 @@ class EventsController extends Controller
      */
     public function destroy(Events $event)
     {
-          // On supprime l'utilisateur
-          $event->delete();
-          // On retourne la réponse JSON
-          return response()->json();
+        // On supprime l'utilisateur
+        $event->delete();
+        // On retourne la réponse JSON
+        return response()->json();
     }
 }

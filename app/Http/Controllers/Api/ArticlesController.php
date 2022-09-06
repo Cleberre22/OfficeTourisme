@@ -31,7 +31,7 @@ class ArticlesController extends Controller
     {
         $request->validate([
             'titleArticle' => 'required|max:100',
-            'contentArticle' => 'required|max:100',
+            'contentArticle' => 'required',
             // 'image' => 'required',
             'user_id' => 'required',
         ]);
@@ -87,7 +87,7 @@ class ArticlesController extends Controller
     {
         $this->validate($request, [
             'titleArticle' => 'required|max:100',
-            'contentArticle' => 'required|max:100',
+            'contentArticle' => 'required',
             // 'image' => 'required',
             'user_id' => 'required',
         ]);

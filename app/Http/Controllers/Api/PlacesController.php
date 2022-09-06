@@ -84,8 +84,13 @@ class PlacesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Places $place)
-    {
-       // On retourne les informations de l'utilisateur en JSON
+    {  
+        $place = DB::table('places')
+        ->leftjoin('place_types', 'place_types.id', '=', 'places.place_types_id')
+        ->select('places.*','namePlaceType')
+        ->where('places.id', '=', $place->id)
+        ->get();
+        
        return response()->json($place);
     }
 
